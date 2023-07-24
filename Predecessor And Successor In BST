@@ -1,0 +1,115 @@
+#include <bits/stdc++.h> 
+/*************************************************************
+
+    Following is the Binary Tree node structure
+
+    template <typename T>
+
+    class BinaryTreeNode
+    {
+    public :
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~BinaryTreeNode() {
+            if (left)
+            {
+                delete left;
+            }
+            if (right)
+            {
+                delete right;
+            }
+        }
+    };
+
+*************************************************************/
+//0(N)+0(logN)
+/*
+void getArray(BinaryTreeNode<int>* root,vector<int>&a){
+    if(root==NULL) return;
+    getArray(root->left,a);
+    a.push_back(root->data);
+    getArray(root->right,a);
+}
+*/
+//0(N)+0(logN)
+/*
+int binarySearch(vector<int>arr,int key){
+    int low=0;
+    int high=arr.size()-1;
+    while(low<=high){
+        int mid=low+(high-low)/2;
+        if(arr[mid]==key){
+            return mid;
+        }
+        else if(arr[mid]<key){
+            low=mid+1;
+        }
+        else{
+            high=mid-1;
+        }
+    }
+    return -1;
+}
+*/
+
+//0(H)+0(H)
+void findSucc(BinaryTreeNode<int>* root,int key,int &succ){
+    if(root==NULL){
+        return;
+    }
+    if(root->data>key){
+        succ=root->data;
+        findSucc(root->left,key,succ);
+    }
+    else{
+        findSucc(root->right,key,succ);
+    }
+}
+//0(H)+0(H)
+void findPre(BinaryTreeNode<int>* root,int key,int &pre){
+    if(root==NULL){
+        return;
+    }
+    if(root->data<key){
+        pre=root->data;
+        findPre(root->right,key,pre);
+    }
+    else{
+        findPre(root->left,key,pre);
+    }
+}
+pair<int,int> predecessorSuccessor(BinaryTreeNode<int>* root, int key)
+{
+    //0(N)+0(logN)
+    /*
+    vector<int>arr;
+    getArray(root,arr);
+    int index=binarySearch(arr,key);
+    if(arr.size()==1){
+      return { -1, -1 };
+    }
+    else if(index==0){
+        return{-1,arr[index+1]};
+    }
+    else if(index==arr.size()-1){
+      return {arr[index - 1], -1};
+    }
+    return
+        {arr[index-1],arr[index+1]};
+    */
+
+    int pre=-1;
+    int succ=-1;
+    findSucc(root,key,succ);
+    findPre(root,key,pre);
+    return { pre, succ };
+}
